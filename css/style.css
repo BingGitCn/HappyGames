@@ -589,7 +589,7 @@ a { color: var(--accent); text-decoration: none; }
   touch-action: manipulation;
   transition: all 0.08s;
 }
-.dpad-btn:active {
+.dpad-btn:active, .dpad-btn.pressed {
   background: var(--accent);
   color: var(--bg);
 }
@@ -618,7 +618,7 @@ a { color: var(--accent); text-decoration: none; }
   touch-action: manipulation;
   transition: all 0.08s;
 }
-.ab-btn:active {
+.ab-btn:active, .ab-btn.pressed {
   background: var(--red);
   color: var(--bg);
 }
@@ -635,7 +635,7 @@ a { color: var(--accent); text-decoration: none; }
   cursor: pointer;
   user-select: none;
 }
-.menu-btn:active { background: var(--accent); color: var(--bg); }
+.menu-btn:active, .menu-btn.pressed { background: var(--accent); color: var(--bg); }
 
 /* ===== FOOTER ===== */
 .footer {

@@ -358,24 +358,45 @@ const App = {
       'KeyZ': 'z', 'KeyX': 'x',
       'Enter': 'Enter', 'Shift': 'Shift'
     };
-    document.querySelectorAll('[data-key]').forEach(btn => {
-      const code = btn.dataset.key;
-      const key = codeToKey[code] || code;
-      const fire = (type) => {
-        target.dispatchEvent(new KeyboardEvent(type, {
-          key: key, code: code, bubbles: true, cancelable: true
-        }));
-      };
-      btn.addEventListener('touchstart', e => {
-        e.preventDefault();
-        fire('keydown');
-      }, { passive: false });
-      btn.addEventListener('touchend', e => {
-        e.preventDefault();
-        fire('keyup');
-      }, { passive: false });
-      btn.addEventListener('touchcancel', () => fire('keyup'));
-    });
+    const btns = document.querySelectorAll('[data-key]');
+    // touchId → { code, key, element }
+    const activeTouches = new Map();
+
+    const getBtn = (touch) => {
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      return el?.closest('[data-key]');
+    };
+
+    const fire = (type, code, key) => {
+      target.dispatchEvent(new KeyboardEvent(type, {
+        key, code, bubbles: true, cancelable: true
+      }));
+    };
+
+    target.parentElement.addEventListener('touchstart', e => {
+      e.preventDefault();
+      for (const touch of e.changedTouches) {
+        const btn = getBtn(touch);
+        if (!btn) continue;
+        const code = btn.dataset.key;
+        const key = codeToKey[code] || code;
+        btn.classList.add('pressed');
+        activeTouches.set(touch.identifier, { code, key, btn });
+        fire('keydown', code, key);
+      }
+    }, { passive: false });
+
+    const endTouch = (e) => {
+      for (const touch of e.changedTouches) {
+        const info = activeTouches.get(touch.identifier);
+        if (!info) continue;
+        info.btn.classList.remove('pressed');
+        activeTouches.delete(touch.identifier);
+        fire('keyup', info.code, info.key);
+      }
+    };
+    target.parentElement.addEventListener('touchend', endTouch, { passive: false });
+    target.parentElement.addEventListener('touchcancel', endTouch, { passive: false });
   },
 
   /* ==================== EMULATOR CORE ==================== */
