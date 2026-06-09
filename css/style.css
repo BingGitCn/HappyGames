@@ -389,7 +389,7 @@ a { color: var(--accent); text-decoration: none; }
 .emulator-box:-webkit-full-screen::after { display: none; }
 
 /* Hide EmulatorJS built-in virtual gamepad (we use our own) */
-ejs_virtualGamepad_parent { display: none !important; }
+.ejs_virtualGamepad_parent { display: none !important; }
 
 .fs-btn {
   position: absolute; top: 8px; right: 8px;

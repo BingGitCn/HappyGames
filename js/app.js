@@ -260,6 +260,7 @@ const App = {
 
     this.startEmulator(g.romUrl);
     window.scrollTo(0, 0);
+    this.bindControls();
   },
 
   /* ==================== EMULATOR PAGE ==================== */
@@ -344,6 +345,37 @@ const App = {
       </div>
     `;
     window.scrollTo(0, 0);
+    this.bindControls();
+  },
+
+  /* ==================== MOBILE CONTROLS ==================== */
+  bindControls() {
+    const codeToKey = {
+      'ArrowUp': 'ArrowUp', 'ArrowDown': 'ArrowDown',
+      'ArrowLeft': 'ArrowLeft', 'ArrowRight': 'ArrowRight',
+      'KeyZ': 'z', 'KeyX': 'x',
+      'Enter': 'Enter', 'Shift': 'Shift'
+    };
+    document.querySelectorAll('[data-key]').forEach(btn => {
+      const code = btn.dataset.key;
+      const key = codeToKey[code] || code;
+      const fire = (type) => {
+        document.dispatchEvent(new KeyboardEvent(type, {
+          key: key, code: code, bubbles: true
+        }));
+      };
+      btn.addEventListener('touchstart', e => {
+        e.preventDefault();
+        fire('keydown');
+      }, { passive: false });
+      btn.addEventListener('touchend', e => {
+        e.preventDefault();
+        fire('keyup');
+      }, { passive: false });
+      btn.addEventListener('touchcancel', e => {
+        fire('keyup');
+      });
+    });
   },
 
   /* ==================== EMULATOR CORE ==================== */
