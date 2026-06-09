@@ -350,58 +350,55 @@ const App = {
 
   /* ==================== MOBILE CONTROLS ==================== */
   bindControls() {
-    const target = document.getElementById('emulator-box');
-    if (!target) return;
-    // Map data-key → keyCode (EmulatorJS uses event.keyCode)
-    const keyMap = {
-      'ArrowUp':    { key: 'ArrowUp',    code: 'ArrowUp',    keyCode: 38 },
-      'ArrowDown':  { key: 'ArrowDown',  code: 'ArrowDown',  keyCode: 40 },
-      'ArrowLeft':  { key: 'ArrowLeft',  code: 'ArrowLeft',  keyCode: 37 },
-      'ArrowRight': { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39 },
-      'KeyZ':       { key: 'z',          code: 'KeyZ',       keyCode: 90 },
-      'KeyX':       { key: 'x',          code: 'KeyX',       keyCode: 88 },
-      'Enter':      { key: 'Enter',      code: 'Enter',      keyCode: 13 },
-      'Shift':      { key: 'Shift',      code: 'Shift',      keyCode: 16 },
+    // NES button indices for simulateInput(player, button, value)
+    // value: 1=press, 0=release
+    const btnMap = {
+      'ArrowUp':    4,
+      'ArrowDown':  5,
+      'ArrowLeft':  6,
+      'ArrowRight': 7,
+      'KeyZ':       0, // A
+      'KeyX':       1, // B
+      'Enter':      3, // Start
+      'Shift':      2, // Select
     };
-    const activeTouches = new Map();
+    const active = new Map(); // touchId → { btnIndex, el }
 
-    const makeEvent = (type, info) => {
-      const evt = new KeyboardEvent(type, {
-        key: info.key, code: info.code, bubbles: true, cancelable: true
-      });
-      Object.defineProperty(evt, 'keyCode', { value: info.keyCode });
-      Object.defineProperty(evt, 'which', { value: info.keyCode });
-      return evt;
+    const sim = (btnIndex, pressed) => {
+      const emu = window.EJS_emulator;
+      if (emu?.gameManager) {
+        emu.gameManager.simulateInput(0, btnIndex, pressed ? 1 : 0);
+      }
     };
 
-    const parent = target.closest('.container') || target.parentElement;
-    parent.addEventListener('touchstart', e => {
-      let hitButton = false;
+    const container = document.getElementById('mobile-controls');
+    if (!container) return;
+
+    container.addEventListener('touchstart', e => {
       for (const touch of e.changedTouches) {
         const el = document.elementFromPoint(touch.clientX, touch.clientY);
         const btn = el?.closest('[data-key]');
         if (!btn) continue;
-        const info = keyMap[btn.dataset.key];
-        if (!info) continue;
-        hitButton = true;
+        const btnIndex = btnMap[btn.dataset.key];
+        if (btnIndex === undefined) continue;
         btn.classList.add('pressed');
-        activeTouches.set(touch.identifier, { info, btn });
-        target.dispatchEvent(makeEvent('keydown', info));
+        active.set(touch.identifier, { btnIndex, el: btn });
+        sim(btnIndex, true);
       }
-      if (hitButton) e.preventDefault();
+      e.preventDefault();
     }, { passive: false });
 
     const endTouches = (e) => {
       for (const touch of e.changedTouches) {
-        const entry = activeTouches.get(touch.identifier);
+        const entry = active.get(touch.identifier);
         if (!entry) continue;
-        entry.btn.classList.remove('pressed');
-        activeTouches.delete(touch.identifier);
-        target.dispatchEvent(makeEvent('keyup', entry.info));
+        entry.el.classList.remove('pressed');
+        active.delete(touch.identifier);
+        sim(entry.btnIndex, false);
       }
     };
-    parent.addEventListener('touchend', endTouches, { passive: false });
-    parent.addEventListener('touchcancel', endTouches, { passive: false });
+    container.addEventListener('touchend', endTouches, { passive: false });
+    container.addEventListener('touchcancel', endTouches, { passive: false });
   },
 
   /* ==================== EMULATOR CORE ==================== */
