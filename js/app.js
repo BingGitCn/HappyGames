@@ -300,6 +300,7 @@ const App = {
             <div class="play-emulator">
               <div class="emulator-wrapper" id="emulator-wrapper">
                 <div id="game"></div>
+                <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
               </div>
               <div class="mobile-controls" id="mobile-controls">
                 <div class="dpad">
@@ -398,6 +399,7 @@ const App = {
             <div class="play-emulator">
               <div class="emulator-wrapper" id="emulator-wrapper">
                 <div id="game"></div>
+                <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
               </div>
             </div>
             <div class="play-sidebar">
@@ -562,6 +564,16 @@ const App = {
     const input = document.getElementById('rom-url-input');
     if (input && input.value.trim()) {
       this.loadEmulator(input.value.trim());
+    }
+  },
+
+  toggleFullscreen() {
+    const el = document.getElementById('emulator-wrapper');
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      el.requestFullscreen();
     }
   },
 

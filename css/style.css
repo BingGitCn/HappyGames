@@ -355,14 +355,35 @@ a:hover { color:var(--accent-light); }
   border-radius:var(--radius-sm); transition:all 0.2s;
 }
 .back-btn:hover { color:var(--text-primary); background:rgba(255,255,255,0.05); }
-.play-layout { display:flex; gap:20px; }
-.play-emulator { flex:1; min-width:0; }
+.play-layout { display:flex; gap:20px; flex-direction:column; align-items:center; }
+.play-emulator { width:100%; max-width:800px; }
 .emulator-wrapper {
   background:#000; border-radius:var(--radius-lg);
   overflow:hidden; position:relative;
-  aspect-ratio:4/3; max-height:70vh;
+  aspect-ratio:4/3; width:100%;
 }
 .emulator-wrapper #game { width:100%; height:100%; }
+.emulator-wrapper:fullscreen,
+.emulator-wrapper:-webkit-full-screen {
+  max-width:none; border-radius:0;
+  aspect-ratio:auto; width:100vw; height:100vh;
+}
+.emulator-wrapper:fullscreen #game,
+.emulator-wrapper:-webkit-full-screen #game {
+  width:100%; height:100%;
+  object-fit:contain;
+}
+.fullscreen-btn {
+  position:absolute; top:8px; right:8px;
+  background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.2);
+  color:#fff; font-size:20px; width:36px; height:36px;
+  border-radius:var(--radius-sm); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s; z-index:10;
+  opacity:0;
+}
+.emulator-wrapper:hover .fullscreen-btn { opacity:1; }
+.fullscreen-btn:hover { background:var(--accent); }
 .emulator-loading {
   position:absolute; top:0; left:0; right:0; bottom:0;
   display:flex; flex-direction:column;
