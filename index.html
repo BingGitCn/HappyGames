@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="快乐童年 - 免费在线玩 FC/NES 经典红白机游戏，1626款游戏，浏览器直接游玩。">
+  <meta name="keywords" content="FC游戏,NES游戏,红白机,在线游戏,超级马里奥,魂斗罗,坦克大战,怀旧游戏">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>快乐童年 - FC/NES 经典游戏在线玩</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="logo-icon">🎮</span>
+        <span class="logo-text">快乐童年</span>
+      </div>
+      <div class="nav-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="搜索游戏名称、厂商、类型..." autocomplete="off">
+      </div>
+      <div class="nav-links" id="nav-links">
+        <span class="nav-link active" data-page="home">首页</span>
+        <span class="nav-link" data-page="browse">游戏库</span>
+        <span class="nav-link" data-page="emulator">模拟器</span>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
+    </div>
+  </nav>
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-results">
+      <div id="search-results-list"></div>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div class="main" id="app"></div>
+
+  <!-- Scripts -->
+  <script src="js/games-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
