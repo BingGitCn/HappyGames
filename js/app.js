@@ -376,17 +376,19 @@ const App = {
 
     const parent = target.closest('.container') || target.parentElement;
     parent.addEventListener('touchstart', e => {
-      e.preventDefault();
+      let hitButton = false;
       for (const touch of e.changedTouches) {
         const el = document.elementFromPoint(touch.clientX, touch.clientY);
         const btn = el?.closest('[data-key]');
         if (!btn) continue;
         const info = keyMap[btn.dataset.key];
         if (!info) continue;
+        hitButton = true;
         btn.classList.add('pressed');
         activeTouches.set(touch.identifier, { info, btn });
         target.dispatchEvent(makeEvent('keydown', info));
       }
+      if (hitButton) e.preventDefault();
     }, { passive: false });
 
     const endTouches = (e) => {
