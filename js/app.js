@@ -1,4 +1,4 @@
-/* 快乐童年 — Retro Arcade Collection (11 Games) */
+/* 存档点 — Retro Arcade Collection (11 Games) */
 
 const App = {
   filter: '',
@@ -55,14 +55,9 @@ const App = {
     el.innerHTML = `
       <div class="fade-in">
         <div class="hero">
-          <div class="hero-eyebrow">&gt; PRESS START_</div>
-          <h1 class="hero-title"><span>快乐童年</span></h1>
-          <p class="hero-sub">// 精选 ${GAMES_DATA.length} 款 FC 经典 · 浏览器即玩</p>
-          <div class="hero-count">
-            <span><strong>${GAMES_DATA.length}</strong> GAMES</span>
-            <span><strong>${genres.length}</strong> GENRES</span>
-            <span><strong>0</strong> INSTALLS</span>
-          </div>
+          <div class="hero-eyebrow">SAVED GAME LOADED_</div>
+          <h1 class="hero-title"><span>存档点</span></h1>
+          <p class="hero-sub">在此处，时间暂停</p>
         </div>
 
         <div class="container">
@@ -81,7 +76,7 @@ const App = {
         </div>
 
         <div class="footer">
-          <div>&copy; 2025 快乐童年 // NES EMULATOR</div>
+          <div>&copy; 2025 存档点 // NES EMULATOR</div>
           <div class="note">基于 EmulatorJS · 所有资源来自互联网公开渠道</div>
         </div>
       </div>
@@ -258,7 +253,7 @@ const App = {
         </div>
 
         <div class="footer">
-          <div>&copy; 2025 快乐童年</div>
+          <div>&copy; 2025 存档点</div>
         </div>
       </div>
     `;
@@ -344,7 +339,7 @@ const App = {
         </div>
 
         <div class="footer">
-          <div>&copy; 2025 快乐童年</div>
+          <div>&copy; 2025 存档点</div>
         </div>
       </div>
     `;
