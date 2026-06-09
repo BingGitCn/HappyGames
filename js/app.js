@@ -517,12 +517,28 @@ const App = {
     window.EJS_startOnLoaded = false;
     window.EJS_language = 'zh-CN';
 
-    try {
-      const resp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(romUrl));
-      if (!resp.ok) throw new Error('fetch failed');
-      const blob = await resp.blob();
+    const proxies = [
+      url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+      url => 'https://corsproxy.io/?' + encodeURIComponent(url),
+      url => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
+    ];
+
+    let blob = null;
+    for (const makeUrl of proxies) {
+      try {
+        const resp = await fetch(makeUrl(romUrl), { signal: AbortSignal.timeout(15000) });
+        if (resp.ok) {
+          blob = await resp.blob();
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+
+    if (blob) {
       window.EJS_gameUrl = URL.createObjectURL(blob);
-    } catch (e) {
+    } else {
       window.EJS_gameUrl = romUrl;
     }
 
