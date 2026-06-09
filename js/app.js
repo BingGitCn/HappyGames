@@ -350,6 +350,8 @@ const App = {
 
   /* ==================== MOBILE CONTROLS ==================== */
   bindControls() {
+    const target = document.getElementById('emulator-box');
+    if (!target) return;
     const codeToKey = {
       'ArrowUp': 'ArrowUp', 'ArrowDown': 'ArrowDown',
       'ArrowLeft': 'ArrowLeft', 'ArrowRight': 'ArrowRight',
@@ -360,8 +362,8 @@ const App = {
       const code = btn.dataset.key;
       const key = codeToKey[code] || code;
       const fire = (type) => {
-        document.dispatchEvent(new KeyboardEvent(type, {
-          key: key, code: code, bubbles: true
+        target.dispatchEvent(new KeyboardEvent(type, {
+          key: key, code: code, bubbles: true, cancelable: true
         }));
       };
       btn.addEventListener('touchstart', e => {
@@ -372,9 +374,7 @@ const App = {
         e.preventDefault();
         fire('keyup');
       }, { passive: false });
-      btn.addEventListener('touchcancel', e => {
-        fire('keyup');
-      });
+      btn.addEventListener('touchcancel', () => fire('keyup'));
     });
   },
 
