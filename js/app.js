@@ -57,7 +57,7 @@ const App = {
         <div class="hero">
           <div class="hero-eyebrow">SAVED GAME LOADED_</div>
           <h1 class="hero-title"><span>存档点</span></h1>
-          <p class="hero-sub">在此处，时间暂停</p>
+          <p class="hero-sub">所有的大人都曾经是小孩，虽然，只有少数的人记得</p>
         </div>
 
         <div class="container">
