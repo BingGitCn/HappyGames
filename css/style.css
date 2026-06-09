@@ -360,7 +360,7 @@ a:hover { color:var(--accent-light); }
 .emulator-wrapper {
   background:#000; border-radius:var(--radius-lg);
   overflow:hidden; position:relative;
-  aspect-ratio:4/3; width:100%;
+  width:100%; min-height:240px;
 }
 .emulator-wrapper #game { width:100%; height:100%; }
 .emulator-wrapper:fullscreen,
@@ -516,6 +516,8 @@ a:hover { color:var(--accent-light); }
   display:none; padding:12px;
   gap:12px; justify-content:space-between;
   align-items:center;
+  background:var(--bg-primary);
+  border-top:1px solid var(--border-color);
 }
 .dpad {
   display:grid;
