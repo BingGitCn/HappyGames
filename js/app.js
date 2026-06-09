@@ -1,4 +1,4 @@
-/* 快乐童年 - Main Application */
+/* 快乐童年 — Main Application (Cyberpunk Theme) */
 
 const App = {
   currentRoute: '',
@@ -8,6 +8,7 @@ const App = {
   searchQuery: '',
   genres: [],
   genreMap: {},
+  activeTab: 'info',
 
   init() {
     this.buildGenreIndex();
@@ -86,7 +87,7 @@ const App = {
           </span>
         </div>
       `).join('')
-      : '<div class="empty-state"><div class="empty-icon">🔍</div><div>没有找到相关游戏</div></div>';
+      : '<div class="empty-state"><div class="empty-icon">🔍</div><div>NO RESULTS FOUND</div></div>';
   },
 
   hideSearch() {
@@ -105,6 +106,7 @@ const App = {
   route() {
     const hash = window.location.hash || '#/';
     this.updateNav(hash);
+    this.activeTab = 'info';
 
     if (hash.startsWith('#/play/')) {
       const id = parseInt(hash.split('/').pop());
@@ -137,23 +139,23 @@ const App = {
     main.innerHTML = `
       <div class="page-enter">
         <div class="hero">
-          <span class="hero-pixel">PRESS START</span>
+          <span class="hero-pixel">&gt; PRESS START_</span>
           <h1 class="hero-title">
-            <span class="highlight">快乐童年</span>
+            <span class="highlight cyber-glitch" data-text="快乐童年">快乐童年</span>
           </h1>
-          <p class="hero-subtitle">重温经典 · ${GAMES_DATA.length} 款红白机游戏 · 浏览器即玩</p>
+          <p class="hero-subtitle">// ${GAMES_DATA.length} CLASSIC NES GAMES · PLAY IN BROWSER</p>
           <div class="hero-stats">
             <div class="hero-stat">
               <div class="hero-stat-value">${GAMES_DATA.length}</div>
-              <div class="hero-stat-label">款游戏</div>
+              <div class="hero-stat-label">Games</div>
             </div>
             <div class="hero-stat">
               <div class="hero-stat-value">${this.genres.length}</div>
-              <div class="hero-stat-label">个分类</div>
+              <div class="hero-stat-label">Genres</div>
             </div>
             <div class="hero-stat">
               <div class="hero-stat-value">0</div>
-              <div class="hero-stat-label">需安装</div>
+              <div class="hero-stat-label">Installs</div>
             </div>
           </div>
         </div>
@@ -161,8 +163,8 @@ const App = {
         <div class="container">
           <div class="section">
             <div class="section-header">
-              <h2 class="section-title">🔥 热门游戏</h2>
-              <span class="section-more" onclick="location.hash='#/browse'">查看全部 →</span>
+              <h2 class="section-title">热门游戏</h2>
+              <span class="section-more" onclick="location.hash='#/browse'">查看全部 &rarr;</span>
             </div>
             <div class="scroll-row">
               ${popularGames.map(g => this.renderGameCard(g)).join('')}
@@ -171,14 +173,14 @@ const App = {
 
           <div class="section">
             <div class="section-header">
-              <h2 class="section-title">📂 游戏分类</h2>
+              <h2 class="section-title">游戏分类</h2>
             </div>
             <div class="category-grid">
               ${this.genres.map(g => `
                 <div class="category-chip" onclick="App.browseGenre('${this.escAttr(g.name)}')">
                   <span class="chip-emoji">${this.getGenreEmoji(g.name)}</span>
                   <span class="chip-name">${this.escHtml(g.name)}</span>
-                  <span class="chip-count">${g.count} 款</span>
+                  <span class="chip-count">${g.count}</span>
                 </div>
               `).join('')}
             </div>
@@ -186,8 +188,8 @@ const App = {
 
           <div class="section">
             <div class="section-header">
-              <h2 class="section-title">🆕 最新收录</h2>
-              <span class="section-more" onclick="location.hash='#/browse'">查看全部 →</span>
+              <h2 class="section-title">最新收录</h2>
+              <span class="section-more" onclick="location.hash='#/browse'">查看全部 &rarr;</span>
             </div>
             <div class="game-grid">
               ${recentGames.map(g => this.renderGameCard(g)).join('')}
@@ -196,7 +198,7 @@ const App = {
         </div>
 
         <div class="footer">
-          <div>© 2025 快乐童年 · 纯前端 NES 模拟器</div>
+          <div>&copy; 2025 快乐童年 // NES EMULATOR SYSTEM</div>
           <div class="disclaimer">所有资源均来自互联网公开渠道，仅供学习交流使用。基于 EmulatorJS 开源项目。</div>
         </div>
       </div>
@@ -227,7 +229,7 @@ const App = {
           <div class="browse-layout">
             <aside class="browse-sidebar">
               <div class="sidebar-section">
-                <div class="sidebar-title">游戏分类</div>
+                <div class="sidebar-title">// 分类</div>
                 <ul class="sidebar-list">
                   <li class="sidebar-item ${!genre ? 'active' : ''}" onclick="App.browseGenre('')">
                     <span>全部游戏</span>
@@ -242,17 +244,17 @@ const App = {
                 </ul>
               </div>
               <div class="sidebar-section">
-                <div class="sidebar-title">玩家数</div>
+                <div class="sidebar-title">// 玩家数</div>
                 <ul class="sidebar-list">
-                  <li class="sidebar-item" onclick="App.browsePlayers(1)">👥 单人游戏</li>
-                  <li class="sidebar-item" onclick="App.browsePlayers(2)">👥👥 双人游戏</li>
+                  <li class="sidebar-item" onclick="App.browsePlayers(1)">&#x1F465; 单人</li>
+                  <li class="sidebar-item" onclick="App.browsePlayers(2)">&#x1F46B; 双人</li>
                 </ul>
               </div>
             </aside>
 
             <div class="browse-main">
               <div class="browse-header">
-                <div class="browse-count">共 <strong>${sorted.length}</strong> 款游戏${genre ? ' · ' + this.escHtml(genre) : ''}</div>
+                <div class="browse-count">共 <strong>${sorted.length}</strong> 款游戏${genre ? ' &middot; ' + this.escHtml(genre) : ''}</div>
                 <div class="browse-sort">
                   <button class="sort-btn ${this.currentSort === 'default' ? 'active' : ''}" onclick="App.setSort('default')">默认</button>
                   <button class="sort-btn ${this.currentSort === 'name' ? 'active' : ''}" onclick="App.setSort('name')">名称</button>
@@ -263,7 +265,7 @@ const App = {
               <div class="game-grid">
                 ${pageGames.length > 0
                   ? pageGames.map(g => this.renderGameCard(g)).join('')
-                  : '<div class="empty-state"><div class="empty-icon">🎮</div><div>没有找到游戏</div></div>'
+                  : '<div class="empty-state"><div class="empty-icon">🎮</div><div>NO GAMES FOUND</div></div>'
                 }
               </div>
               ${this.renderPagination(page, totalPages)}
@@ -271,7 +273,7 @@ const App = {
           </div>
         </div>
         <div class="footer">
-          <div>© 2025 快乐童年</div>
+          <div>&copy; 2025 快乐童年 // NES EMULATOR SYSTEM</div>
           <div class="disclaimer">所有资源均来自互联网公开渠道，仅供学习交流使用。</div>
         </div>
       </div>
@@ -282,7 +284,7 @@ const App = {
   renderPlayPage(id) {
     const game = GAMES_DATA.find(g => g.id === id);
     if (!game) {
-      document.getElementById('app').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div>游戏未找到</div></div>';
+      document.getElementById('app').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div>GAME NOT FOUND</div></div>';
       return;
     }
 
@@ -293,14 +295,21 @@ const App = {
       <div class="page-enter">
         <div class="container">
           <div class="play-header">
-            <div class="back-btn" onclick="history.back()">← 返回</div>
-            <h2 style="font-size:18px;font-weight:600;">${this.escHtml(game.name)}</h2>
+            <div class="back-btn" onclick="history.back()">&larr; BACK</div>
+            <h2 style="font-family:var(--font-heading);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--fg);">${this.escHtml(game.name)}</h2>
           </div>
           <div class="play-layout">
             <div class="play-emulator">
-              <div class="emulator-wrapper" id="emulator-wrapper">
-                <div id="game"></div>
-                <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
+              <div class="emulator-frame">
+                <div class="emulator-bar">
+                  <div class="emulator-bar-dots"><span></span><span></span><span></span></div>
+                  <span class="emulator-bar-status">// ${this.escHtml(game.name)} [${this.escHtml(game.genre)}]</span>
+                  <span>${game.year}</span>
+                </div>
+                <div class="emulator-wrapper" id="emulator-wrapper">
+                  <div id="game"></div>
+                  <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
+                </div>
               </div>
               <div class="mobile-controls" id="mobile-controls">
                 <div class="dpad">
@@ -326,58 +335,66 @@ const App = {
                 </div>
               </div>
             </div>
-            <div class="play-sidebar">
-              <div class="game-info-card">
-                <div class="game-info-title">${this.escHtml(game.name)}</div>
-                <div class="game-info-row">
-                  <span class="game-info-label">类型</span>
-                  <span class="game-info-value">${this.escHtml(game.genre)}</span>
-                </div>
-                <div class="game-info-row">
-                  <span class="game-info-label">厂商</span>
-                  <span class="game-info-value">${this.escHtml(game.publisher)}</span>
-                </div>
-                <div class="game-info-row">
-                  <span class="game-info-label">年份</span>
-                  <span class="game-info-value">${game.year}</span>
-                </div>
-                <div class="game-info-row">
-                  <span class="game-info-label">玩家</span>
-                  <span class="game-info-value">${game.players} 人</span>
-                </div>
-                <div class="game-actions">
-                  <a class="btn btn-primary" href="${game.romUrl}" download="${this.escAttr(game.name)}.nes">📥 下载 ROM</a>
-                  <button class="btn btn-secondary" onclick="App.reloadEmulator()">🔄 重新加载</button>
-                </div>
+
+            <div class="play-info-section">
+              <div class="info-tabs">
+                <button class="info-tab active" onclick="App.switchTab('info')">游戏信息</button>
+                <button class="info-tab" onclick="App.switchTab('controls')">操作指南</button>
+                <button class="info-tab" onclick="App.switchTab('related')">相似游戏</button>
               </div>
-              <div class="controls-guide">
-                <div class="controls-title">⌨️ 操作说明</div>
-                <div class="controls-row"><span class="controls-action">移动</span><span class="controls-key">↑ ↓ ← →</span></div>
-                <div class="controls-row"><span class="controls-action">A 键</span><span class="controls-key">Z</span></div>
-                <div class="controls-row"><span class="controls-action">B 键</span><span class="controls-key">X</span></div>
-                <div class="controls-row"><span class="controls-action">开始</span><span class="controls-key">Enter</span></div>
-                <div class="controls-row"><span class="controls-action">选择</span><span class="controls-key">Shift</span></div>
+              <div class="info-tab-content">
+                <div class="tab-panel active" id="tab-info">
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <div class="info-item-label">类型</div>
+                      <div class="info-item-value">${this.escHtml(game.genre)}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-item-label">厂商</div>
+                      <div class="info-item-value">${this.escHtml(game.publisher)}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-item-label">年份</div>
+                      <div class="info-item-value">${game.year}</div>
+                    </div>
+                    <div class="info-item">
+                      <div class="info-item-label">玩家</div>
+                      <div class="info-item-value">${game.players} 人</div>
+                    </div>
+                  </div>
+                  <div class="game-actions">
+                    <a class="btn btn-primary" href="${game.romUrl}" download="${this.escAttr(game.name)}.nes">下载 ROM</a>
+                    <button class="btn btn-secondary" onclick="App.reloadEmulator()">重新加载</button>
+                  </div>
+                </div>
+                <div class="tab-panel" id="tab-controls">
+                  <div class="controls-grid">
+                    <div class="controls-row"><span class="controls-action">移动</span><span class="controls-key">↑ ↓ ← →</span></div>
+                    <div class="controls-row"><span class="controls-action">A 键</span><span class="controls-key">Z</span></div>
+                    <div class="controls-row"><span class="controls-action">B 键</span><span class="controls-key">X</span></div>
+                    <div class="controls-row"><span class="controls-action">开始</span><span class="controls-key">Enter</span></div>
+                    <div class="controls-row"><span class="controls-action">选择</span><span class="controls-key">Shift</span></div>
+                    <div class="controls-row"><span class="controls-action">全屏</span><span class="controls-key">F11</span></div>
+                  </div>
+                </div>
+                <div class="tab-panel" id="tab-related">
+                  ${related.length > 0 ? `
+                    <div class="related-grid">
+                      ${related.map(g => `
+                        <div class="related-card" onclick="App.playGame(${g.id})">
+                          <div class="related-card-name">${this.escHtml(g.name)}</div>
+                          <div class="related-card-info">${g.year} &middot; ${this.escHtml(g.genre)}</div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : '<div class="empty-state"><div class="empty-icon">🔍</div><div>NO RELATED GAMES</div></div>'}
+                </div>
               </div>
             </div>
           </div>
-          ${related.length > 0 ? `
-            <div class="related-section">
-              <div class="section-header">
-                <h2 class="section-title">🎮 相似游戏</h2>
-              </div>
-              <div class="related-grid">
-                ${related.map(g => `
-                  <div class="related-card" onclick="App.playGame(${g.id})">
-                    <div class="related-card-name">${this.escHtml(g.name)}</div>
-                    <div class="related-card-info">${g.year} · ${this.escHtml(g.genre)}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
         </div>
         <div class="footer">
-          <div>© 2025 快乐童年</div>
+          <div>&copy; 2025 快乐童年 // NES EMULATOR SYSTEM</div>
         </div>
       </div>
     `;
@@ -386,47 +403,72 @@ const App = {
     window.scrollTo(0, 0);
   },
 
+  switchTab(tabName) {
+    this.activeTab = tabName;
+    document.querySelectorAll('.info-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    // Find the clicked tab button by matching the tabName
+    const tabs = document.querySelectorAll('.info-tab');
+    const tabMap = { info: 0, controls: 1, related: 2 };
+    if (tabMap[tabName] !== undefined) tabs[tabMap[tabName]].classList.add('active');
+    const panel = document.getElementById('tab-' + tabName);
+    if (panel) panel.classList.add('active');
+  },
+
   renderEmulatorPage() {
     const main = document.getElementById('app');
     main.innerHTML = `
       <div class="page-enter">
         <div class="container" style="padding-top:24px;padding-bottom:48px;">
           <div class="play-header">
-            <div class="back-btn" onclick="history.back()">← 返回</div>
-            <h2 style="font-size:18px;font-weight:600;">通用模拟器</h2>
+            <div class="back-btn" onclick="history.back()">&larr; BACK</div>
+            <h2 style="font-family:var(--font-heading);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--fg);">通用模拟器</h2>
           </div>
           <div class="play-layout">
             <div class="play-emulator">
-              <div class="emulator-wrapper" id="emulator-wrapper">
-                <div id="game"></div>
-                <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
+              <div class="emulator-frame">
+                <div class="emulator-bar">
+                  <div class="emulator-bar-dots"><span></span><span></span><span></span></div>
+                  <span class="emulator-bar-status">// CUSTOM ROM LOADER</span>
+                  <span>READY</span>
+                </div>
+                <div class="emulator-wrapper" id="emulator-wrapper">
+                  <div id="game"></div>
+                  <button class="fullscreen-btn" onclick="App.toggleFullscreen()" title="全屏">⛶</button>
+                </div>
               </div>
             </div>
-            <div class="play-sidebar">
-              <div class="game-info-card">
-                <div class="game-info-title">加载本地 ROM</div>
-                <div class="game-actions">
-                  <label class="btn btn-primary" style="cursor:pointer;">
-                    📂 选择 .nes 文件
-                    <input type="file" accept=".nes" id="rom-file-input" style="display:none;" onchange="App.loadLocalRom(this)">
-                  </label>
-                </div>
-                <div style="margin-top:16px;">
-                  <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">或输入 ROM URL：</div>
-                  <div style="display:flex;gap:8px;">
-                    <input type="text" id="rom-url-input" placeholder="https://example.com/game.nes"
-                      style="flex:1;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:var(--bg-secondary);color:var(--text-primary);font-size:13px;outline:none;">
-                    <button class="btn btn-secondary" onclick="App.loadUrlRom()">加载</button>
+            <div class="play-info-section">
+              <div class="info-tabs">
+                <button class="info-tab active" onclick="App.switchTab('info')">加载 ROM</button>
+                <button class="info-tab" onclick="App.switchTab('controls')">操作指南</button>
+              </div>
+              <div class="info-tab-content">
+                <div class="tab-panel active" id="tab-info">
+                  <div style="margin-bottom:16px;">
+                    <label class="btn btn-primary" style="cursor:pointer;display:inline-flex;">
+                      选择 .nes 文件
+                      <input type="file" accept=".nes" id="rom-file-input" style="display:none;" onchange="App.loadLocalRom(this)">
+                    </label>
+                  </div>
+                  <div style="margin-bottom:8px;">
+                    <div style="font-family:var(--font-ui);font-size:10px;color:var(--fg-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">// OR INPUT ROM URL</div>
+                    <div style="display:flex;gap:8px;">
+                      <input type="text" id="rom-url-input" placeholder="https://example.com/game.nes"
+                        style="flex:1;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);color:var(--accent);font-family:var(--font-mono);font-size:12px;outline:none;">
+                      <button class="btn btn-secondary" onclick="App.loadUrlRom()">加载</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="controls-guide">
-                <div class="controls-title">⌨️ 操作说明</div>
-                <div class="controls-row"><span class="controls-action">移动</span><span class="controls-key">↑ ↓ ← →</span></div>
-                <div class="controls-row"><span class="controls-action">A 键</span><span class="controls-key">Z</span></div>
-                <div class="controls-row"><span class="controls-action">B 键</span><span class="controls-key">X</span></div>
-                <div class="controls-row"><span class="controls-action">开始</span><span class="controls-key">Enter</span></div>
-                <div class="controls-row"><span class="controls-action">选择</span><span class="controls-key">Shift</span></div>
+                <div class="tab-panel" id="tab-controls">
+                  <div class="controls-grid">
+                    <div class="controls-row"><span class="controls-action">移动</span><span class="controls-key">↑ ↓ ← →</span></div>
+                    <div class="controls-row"><span class="controls-action">A 键</span><span class="controls-key">Z</span></div>
+                    <div class="controls-row"><span class="controls-action">B 键</span><span class="controls-key">X</span></div>
+                    <div class="controls-row"><span class="controls-action">开始</span><span class="controls-key">Enter</span></div>
+                    <div class="controls-row"><span class="controls-action">选择</span><span class="controls-key">Shift</span></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -446,8 +488,8 @@ const App = {
           <span class="game-tag">${this.escHtml(game.publisher)}</span>
         </div>
         <div class="game-card-footer">
-          <span class="game-card-info">${game.players} 人</span>
-          <span class="game-card-play">▶ 开始</span>
+          <span class="game-card-info">${game.players}P</span>
+          <span class="game-card-play">&gt; PLAY</span>
         </div>
       </div>
     `;
@@ -464,14 +506,14 @@ const App = {
     pages = [...new Set(pages)].sort((a, b) => a - b);
 
     let html = '<div class="pagination">';
-    html += `<button class="page-btn ${current === 1 ? 'disabled' : ''}" onclick="App.goPage(${current - 1})" ${current === 1 ? 'disabled' : ''}>←</button>`;
+    html += `<button class="page-btn ${current === 1 ? 'disabled' : ''}" onclick="App.goPage(${current - 1})" ${current === 1 ? 'disabled' : ''}>&lt;</button>`;
     pages.forEach((p, i) => {
       if (i > 0 && p - pages[i - 1] > 1) {
         html += '<span class="page-ellipsis">...</span>';
       }
       html += `<button class="page-btn ${p === current ? 'active' : ''}" onclick="App.goPage(${p})">${p}</button>`;
     });
-    html += `<button class="page-btn ${current === total ? 'disabled' : ''}" onclick="App.goPage(${current + 1})" ${current === total ? 'disabled' : ''}>→</button>`;
+    html += `<button class="page-btn ${current === total ? 'disabled' : ''}" onclick="App.goPage(${current + 1})" ${current === total ? 'disabled' : ''}>&gt;</button>`;
     html += '</div>';
     return html;
   },
@@ -495,7 +537,7 @@ const App = {
     const filtered = GAMES_DATA.filter(g => g.players >= players);
     const main = document.querySelector('.browse-main');
     if (main) {
-      main.querySelector('.browse-count').innerHTML = `共 <strong>${filtered.length}</strong> 款游戏 · ${players}人`;
+      main.querySelector('.browse-count').innerHTML = `共 <strong>${filtered.length}</strong> 款游戏 &middot; ${players}人`;
       main.querySelector('.game-grid').innerHTML = filtered.slice(0, 48).map(g => this.renderGameCard(g)).join('');
     }
   },
