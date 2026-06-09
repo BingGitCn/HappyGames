@@ -357,8 +357,8 @@ const App = {
       'ArrowDown':  5,
       'ArrowLeft':  6,
       'ArrowRight': 7,
-      'KeyZ':       0, // A
-      'KeyX':       1, // B
+      'KeyZ':       8, // A
+      'KeyX':       0, // B
       'Enter':      3, // Start
       'Shift':      2, // Select
     };
